@@ -20,5 +20,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "For Dealer"
 include ':app'
-include ':shared'
 include ':app:features'
+include ':app:features:homescreen'
+include ':app:features:shared'
+include ':app:translations'

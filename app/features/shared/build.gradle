@@ -1,0 +1,3 @@
+dependencies {
+    api 'androidx.navigation:navigation-compose:2.4.0-alpha07'
+}
