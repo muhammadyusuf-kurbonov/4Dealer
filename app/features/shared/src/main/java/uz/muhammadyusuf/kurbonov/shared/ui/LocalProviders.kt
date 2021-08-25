@@ -1,4 +1,4 @@
-package uz.muhammadyusuf.kurbonov.shared
+package uz.muhammadyusuf.kurbonov.shared.ui
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController

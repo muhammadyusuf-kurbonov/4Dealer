@@ -1,23 +1,17 @@
 package uz.muhammadyusuf.kurbonov.fordealer.homescreen
 
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import uz.muhammadyusuf.kurbonov.shared.ui.LocalNavController
 
 @Composable
-fun HomeScreen(){
-    val scaffoldState = rememberScaffoldState()
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = { AppBar() },
-    ) {
-
-    }
+fun HomeScreen() {
+    HomeContent()
 }
 
 @Preview()
 @Composable
-fun HomeScreenPreview(){
-    HomeScreen()
+fun HomeScreenPreview() {
+    HomeContent()
 }

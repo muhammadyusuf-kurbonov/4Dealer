@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/features" />
+            <option value="$PROJECT_DIR$/app/features/add-edit" />
             <option value="$PROJECT_DIR$/app/features/homescreen" />
             <option value="$PROJECT_DIR$/app/features/shared" />
             <option value="$PROJECT_DIR$/app/translations" />
