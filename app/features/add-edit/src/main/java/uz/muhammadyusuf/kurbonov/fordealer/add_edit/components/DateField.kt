@@ -4,8 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -21,11 +20,14 @@ import java.util.*
 @Composable
 fun DateField(
     modifier: Modifier = Modifier,
-    dateTimeAsString: String,
-    onValueChange: (String) -> Unit
+    dateTime: Long,
+    onValueChange: (Long) -> Unit
 ) {
 
     val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
+    var dateTimeAsString by remember {
+        mutableStateOf(dateFormat.format(dateTime))
+    }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -40,7 +42,16 @@ fun DateField(
     OutlinedTextField(
         modifier = modifier,
         value = dateTimeAsString,
-        onValueChange = onValueChange,
+        onValueChange = {
+            dateTimeAsString = it
+            try {
+                dateFormat.isLenient = false
+                val date = dateFormat.parse(dateTimeAsString)
+                if (date != null) onValueChange(date.time)
+            } catch (e: ParseException) {
+                true
+            }
+        },
         isError = notValidDate,
         label = {
             Text(
@@ -54,7 +65,7 @@ fun DateField(
                         context,
                         if (!notValidDate) dateFormat.parse(dateTimeAsString) else Date()
                     )
-                    onValueChange(dateFormat.format(Date(pickedDate)))
+                    onValueChange(pickedDate)
                 }
             }) {
                 Icon(imageVector = Icons.Default.DateRange, contentDescription = "")

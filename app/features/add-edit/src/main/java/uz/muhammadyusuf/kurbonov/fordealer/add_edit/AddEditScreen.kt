@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.DateField
+import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.TimeField
 import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
 import uz.muhammadyusuf.kurbonov.shared.ui.LocalTitleController
@@ -34,14 +35,10 @@ fun AddEditContent(
 
         val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
 
-        var dateTimeAsString by remember {
+        var dateTime by remember {
             mutableStateOf(
-                dateFormat.format(
-                    Date(
                         transaction?.dateTime
                             ?: System.currentTimeMillis()
-                    )
-                )
             )
         }
 
@@ -49,9 +46,17 @@ fun AddEditContent(
 
         DateField(
             modifier = Modifier.fillMaxWidth(),
-            dateTimeAsString = dateTimeAsString,
+            dateTime = dateTime,
             onValueChange = {
-                dateTimeAsString = it
+                dateTime = it
+            })
+
+
+        TimeField(
+            modifier = Modifier.fillMaxWidth(),
+            dateTime = dateTime,
+            onValueChange = {
+                dateTime = it
             })
     }
 }
