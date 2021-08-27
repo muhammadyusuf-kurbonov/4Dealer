@@ -1,34 +1,57 @@
 package uz.muhammadyusuf.kurbonov.fordealer.add_edit
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.DateField
 import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
+import uz.muhammadyusuf.kurbonov.shared.ui.LocalTitleController
 import uz.muhammadyusuf.kurbonov.shared.ui.MEDIUM_MARGIN
+import java.text.DateFormat
+import java.util.*
 
 @Composable
 fun AddEditScreen(transaction: Transaction? = null) {
+    LocalTitleController.current.changeTitle(
+        if (transaction != null) stringResource(id = R.string.edit_transaction)
+        else stringResource(R.string.new_transaction)
+    )
+    AddEditContent(
+        transaction = transaction,
+        save = {
+
+        })
+}
+
+@Composable
+fun AddEditContent(
+    transaction: Transaction? = null,
+    save: (Transaction) -> Unit
+) {
     Column(modifier = Modifier.padding(MEDIUM_MARGIN)) {
 
-        Text(
-            text = stringResource(
-                id =
-                if (transaction != null) R.string.edit_transaction
-                else R.string.add_transaction
-            ),
-            style = MaterialTheme.typography.subtitle1
-        )
+        val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
+
+        var dateTimeAsString by remember {
+            mutableStateOf(
+                dateFormat.format(
+                    Date(
+                        transaction?.dateTime
+                            ?: System.currentTimeMillis()
+                    )
+                )
+            )
+        }
 
         Spacer(modifier = Modifier.height(MEDIUM_MARGIN))
 
-
-
+        DateField(
+            modifier = Modifier.fillMaxWidth(),
+            dateTimeAsString = dateTimeAsString,
+            onValueChange = {
+                dateTimeAsString = it
+            })
     }
 }

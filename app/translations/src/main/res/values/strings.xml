@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">4Dealer</string>
-    <string name="add_transaction">Add transaction</string>
+    <string name="new_transaction">New transaction</string>
     <string name="edit_transaction">Edit transaction</string>
+    <string name="Date">Date</string>
 </resources>
