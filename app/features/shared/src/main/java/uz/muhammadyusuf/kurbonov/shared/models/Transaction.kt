@@ -4,5 +4,6 @@ data class Transaction(
     var id: String = "",
     var amount: Float = 0f,
     var type: TransactionType = TransactionType.INCOME,
-    var note: String
+    var note: String = "",
+    var dateTime: Long = System.currentTimeMillis()
 )
