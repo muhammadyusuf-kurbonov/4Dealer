@@ -10,8 +10,6 @@ import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
 import uz.muhammadyusuf.kurbonov.shared.ui.LocalTitleController
 import uz.muhammadyusuf.kurbonov.shared.ui.MEDIUM_MARGIN
-import java.text.DateFormat
-import java.util.*
 
 @Composable
 fun AddEditScreen(transaction: Transaction? = null) {
@@ -33,13 +31,15 @@ fun AddEditContent(
 ) {
     Column(modifier = Modifier.padding(MEDIUM_MARGIN)) {
 
-        val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
-
         var dateTime by remember {
             mutableStateOf(
                         transaction?.dateTime
                             ?: System.currentTimeMillis()
             )
+        }
+
+        LaunchedEffect(key1 = Unit) {
+            dateTime = System.currentTimeMillis()
         }
 
         Spacer(modifier = Modifier.height(MEDIUM_MARGIN))
@@ -58,5 +58,6 @@ fun AddEditContent(
             onValueChange = {
                 dateTime = it
             })
+
     }
 }

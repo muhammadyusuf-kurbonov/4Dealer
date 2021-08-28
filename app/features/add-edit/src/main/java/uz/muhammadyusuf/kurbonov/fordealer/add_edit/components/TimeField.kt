@@ -5,12 +5,17 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.ui.LARGE_MARGIN
+import uz.muhammadyusuf.kurbonov.shared.ui.assignTime
+import uz.muhammadyusuf.kurbonov.shared.ui.pickTime
 import java.text.DateFormat
 import java.text.ParseException
+import java.util.*
 
 @Composable
 fun TimeField(
@@ -18,9 +23,8 @@ fun TimeField(
     dateTime: Long,
     onValueChange: (Long) -> Unit
 ) {
-
     val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
-    var timeAsString by remember {
+    var timeAsString by remember(dateTime) {
         mutableStateOf(timeFormat.format(dateTime))
     }
     val context = LocalContext.current
@@ -43,7 +47,7 @@ fun TimeField(
                 timeFormat.isLenient = false
                 val timeInMillis = timeFormat.parse(timeAsString)
                 if (timeInMillis != null)
-                    onValueChange(timeInMillis.time)
+                    onValueChange(assignTime(dateTime, timeInMillis.time))
             } catch (e: ParseException) {
             }
         },
@@ -53,19 +57,26 @@ fun TimeField(
                 text = stringResource(id = R.string.Time)
             )
         },
-//        trailingIcon = {
-//            IconButton(onClick = {
-//                scope.launch {
-//                    val pickedDate = pickDate(
-//                        context,
-//                        if (!notValidDate) dateFormat.parse(timeAsString) else Date()
-//                    )
-//                    onValueChange(dateFormat.format(Date(pickedDate)))
-//                }
-//            }) {
-//                Icon(imageVector = Icons.Default.DateRange, contentDescription = "")
-//            }
-//        }
+        trailingIcon = {
+            IconButton(onClick = {
+                scope.launch {
+                    val pickedTime = pickTime(
+                        context,
+                        if (!notValidTime) Date(dateTime) else Date()
+                    )
+                    onValueChange(pickedTime)
+                }
+            }) {
+                Icon(
+                    painter = painterResource(
+                        id =
+                        uz.muhammadyusuf.kurbonov.fordealer.add_edit.
+                                R.drawable.ic_baseline_access_time_24
+                    ),
+                    contentDescription = stringResource(R.string.select_time)
+                )
+            }
+        }
     )
 
     if (notValidTime)

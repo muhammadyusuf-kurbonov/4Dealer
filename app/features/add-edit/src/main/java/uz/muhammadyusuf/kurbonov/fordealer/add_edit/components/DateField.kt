@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.ui.LARGE_MARGIN
+import uz.muhammadyusuf.kurbonov.shared.ui.assignDate
 import uz.muhammadyusuf.kurbonov.shared.ui.pickDate
 import java.text.DateFormat
 import java.text.ParseException
@@ -23,10 +24,9 @@ fun DateField(
     dateTime: Long,
     onValueChange: (Long) -> Unit
 ) {
-
     val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
-    var dateTimeAsString by remember {
-        mutableStateOf(dateFormat.format(dateTime))
+    var dateTimeAsString by remember(dateTime) {
+        mutableStateOf(dateFormat.format(Date(dateTime)))
     }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -47,9 +47,9 @@ fun DateField(
             try {
                 dateFormat.isLenient = false
                 val date = dateFormat.parse(dateTimeAsString)
-                if (date != null) onValueChange(date.time)
+                if (date != null)
+                    onValueChange(assignDate(dateTime, date.time))
             } catch (e: ParseException) {
-                true
             }
         },
         isError = notValidDate,
@@ -63,12 +63,12 @@ fun DateField(
                 scope.launch {
                     val pickedDate = pickDate(
                         context,
-                        if (!notValidDate) dateFormat.parse(dateTimeAsString) else Date()
+                        if (!notValidDate) Date(dateTime) else Date()
                     )
                     onValueChange(pickedDate)
                 }
             }) {
-                Icon(imageVector = Icons.Default.DateRange, contentDescription = "")
+                Icon(imageVector = Icons.Default.DateRange, contentDescription = stringResource(R.string.select_date))
             }
         }
     )
