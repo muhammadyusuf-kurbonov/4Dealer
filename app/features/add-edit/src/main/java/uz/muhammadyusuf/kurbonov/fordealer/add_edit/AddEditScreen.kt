@@ -1,7 +1,9 @@
 package uz.muhammadyusuf.kurbonov.fordealer.add_edit
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -10,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.DateField
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.TimeField
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.ToggleStatusButton
@@ -50,6 +53,10 @@ fun AddEditContent(
             mutableStateOf(
                 transaction?.type ?: TransactionType.INCOME
             )
+        }
+
+        var amount by remember {
+            mutableStateOf(0f)
         }
 
         LaunchedEffect(key1 = Unit) {
@@ -113,5 +120,22 @@ fun AddEditContent(
                     transactionType = TransactionType.OUTGOING
                 })
         }
+
+        Spacer(modifier = Modifier.height(MEDIUM_MARGIN))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = amount.toString(),
+            onValueChange = {
+                amount = it.toFloat()
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number
+            ),
+            leadingIcon = {
+                Text(text = "$")
+            }
+        )
     }
 }

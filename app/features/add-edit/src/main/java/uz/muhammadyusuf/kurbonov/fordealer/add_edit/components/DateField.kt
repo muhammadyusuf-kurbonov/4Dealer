@@ -70,7 +70,8 @@ fun DateField(
             }) {
                 Icon(imageVector = Icons.Default.DateRange, contentDescription = stringResource(R.string.select_date))
             }
-        }
+        },
+        singleLine = true,
     )
 
     if (notValidDate)
