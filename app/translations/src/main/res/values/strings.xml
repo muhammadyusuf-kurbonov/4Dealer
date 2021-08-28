@@ -9,4 +9,5 @@
     <string name="select_time">Select time</string>
     <string name="income">Income</string>
     <string name="expense">Expense</string>
+    <string name="note">Note</string>
 </resources>

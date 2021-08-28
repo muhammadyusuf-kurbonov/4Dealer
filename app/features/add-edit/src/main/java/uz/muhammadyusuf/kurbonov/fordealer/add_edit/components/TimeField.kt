@@ -86,6 +86,7 @@ fun TimeField(
         Text(
             modifier = modifier.padding(LARGE_MARGIN, 0.dp),
             text = "Not valid time",
-            color = MaterialTheme.colors.error
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption
         )
 }

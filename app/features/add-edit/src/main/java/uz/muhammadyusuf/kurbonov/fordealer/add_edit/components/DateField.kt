@@ -78,6 +78,7 @@ fun DateField(
         Text(
             modifier = modifier.padding(LARGE_MARGIN, 0.dp),
             text = "Not valid date",
-            color = MaterialTheme.colors.error
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption
         )
 }
