@@ -1,4 +1,4 @@
-package uz.muhammadyusuf.kurbonov.fordealer.homescreen
+package uz.muhammadyusuf.kurbonov.fordealer.ui.components
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -8,11 +8,11 @@ import androidx.compose.ui.res.stringResource
 import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 
 @Composable
-fun AppBar() {
+fun AppBar(title: String? = null) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.app_name),
+                text = title ?: stringResource(R.string.app_name),
                 style = MaterialTheme.typography.h6
             )
         }
