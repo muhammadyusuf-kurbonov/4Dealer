@@ -6,8 +6,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-internal class FirebaseRepositoryImpl : Repository {
-    private val firestore by lazy { FirebaseFirestore.getInstance() }
+internal class FirebaseRepositoryImpl(private val firestore: FirebaseFirestore) : Repository {
     override suspend fun createTransaction(transaction: Transaction) =
         suspendCoroutine<Unit> { continuation ->
             val document = firestore.collection("transactions").document()

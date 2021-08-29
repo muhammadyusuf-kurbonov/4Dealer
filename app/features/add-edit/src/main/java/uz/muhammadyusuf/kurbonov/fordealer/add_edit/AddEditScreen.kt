@@ -1,6 +1,5 @@
 package uz.muhammadyusuf.kurbonov.fordealer.add_edit
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -17,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.DateField
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.TimeField
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.components.ToggleStatusButton
+import uz.muhammadyusuf.kurbonov.fordealer.add_edit.di.LocalAddEditComponent
 import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
-import uz.muhammadyusuf.kurbonov.shared.models.TransactionType
 import uz.muhammadyusuf.kurbonov.shared.ui.*
 
 @Composable
@@ -29,10 +28,17 @@ fun AddEditScreen(transaction: Transaction? = null) {
         if (transaction != null) stringResource(id = R.string.edit_transaction)
         else stringResource(R.string.new_transaction)
     )
+
+    val component = LocalAddEditComponent.current
+    val viewModel = component.viewModel
+
+    val addEditState by viewModel.addEditState.collectAsState()
+
     AddEditContent(
+        addEditState = addEditState,
         transaction = transaction,
         save = {
-            Log.d("Add-edit", it.toString())
+            viewModel.save(it)
             navController.navigate(NavDestinations.HOME)
         },
         cancel = {
@@ -42,12 +48,26 @@ fun AddEditScreen(transaction: Transaction? = null) {
 
 @Composable
 fun AddEditContent(
+    addEditState: AddEditState,
     transaction: Transaction? = null,
     save: (Transaction) -> Unit,
     cancel: () -> Unit
 ) {
-    Column(modifier = Modifier.padding(MEDIUM_MARGIN)) {
+    if (addEditState == AddEditState.Saving)
+        LinearProgressIndicator(
+            modifier = Modifier.fillMaxWidth()
+        )
 
+    if (addEditState == AddEditState.Saved) {
+        val snackbarController = LocalSnackbarController.current
+        val message = stringResource(R.string.saved)
+        LaunchedEffect(key1 = Unit) {
+            cancel()
+            snackbarController.showInfoMessage(message)
+        }
+    }
+
+    Column(modifier = Modifier.padding(MEDIUM_MARGIN)) {
         var dateTime by remember {
             mutableStateOf(
                 transaction?.dateTime
@@ -56,12 +76,13 @@ fun AddEditContent(
         }
         var transactionType by remember {
             mutableStateOf(
-                transaction?.type ?: TransactionType.INCOME
+                if ((transaction?.amount ?: 1.0) > 0.0) TransactionType.INCOME
+                else TransactionType.OUTGOING
             )
         }
 
         var amount by remember {
-            mutableStateOf(0f)
+            mutableStateOf(0.0)
         }
 
         var note by remember {
@@ -101,12 +122,12 @@ fun AddEditContent(
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(
-                            id = R.string.income
+                            id = R.string.revenue
                         ),
                         tint = Color.Green
                     )
                 },
-                caption = stringResource(R.string.income),
+                caption = stringResource(R.string.revenue),
                 activated = transactionType == TransactionType.INCOME,
                 onActivate = {
                     transactionType = TransactionType.INCOME
@@ -136,7 +157,11 @@ fun AddEditContent(
             modifier = Modifier.fillMaxWidth(),
             value = amount.toString(),
             onValueChange = {
-                amount = it.toFloat()
+                amount = try {
+                    it.toDouble()
+                }catch (e: Exception){
+                    amount
+                }
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -185,11 +210,12 @@ fun AddEditContent(
 
             Spacer(modifier = Modifier.width(SMALL_MARGIN))
 
-            Button(onClick = {
+            Button(
+                enabled = amount > 0f,
+                onClick = {
                 save(
                     Transaction(
-                        amount = amount,
-                        type = transactionType,
+                        amount = if (transactionType == TransactionType.INCOME) amount else -amount,
                         dateTime = dateTime,
                         note = note
                     )

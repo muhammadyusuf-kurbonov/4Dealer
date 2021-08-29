@@ -11,13 +11,15 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.AddEditScreen
+import uz.muhammadyusuf.kurbonov.fordealer.add_edit.di.LocalAddEditComponent
 import uz.muhammadyusuf.kurbonov.fordealer.homescreen.HomeScreen
 import uz.muhammadyusuf.kurbonov.fordealer.ui.components.AppBar
-import uz.muhammadyusuf.kurbonov.fordealer.ui.components.AppFloatingActionButton
 import uz.muhammadyusuf.kurbonov.fordealer.ui.theme.ForDealerTheme
 import uz.muhammadyusuf.kurbonov.shared.ui.LocalNavController
 import uz.muhammadyusuf.kurbonov.shared.ui.LocalSnackbarController
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 title = newTitle
             }
             val snackbarController = SnackbarController { message ->
-                scaffoldState.snackbarHostState.showSnackbar(message)
+                lifecycleScope.launch { scaffoldState.snackbarHostState.showSnackbar(message) }
             }
 
             CompositionLocalProvider(
@@ -56,13 +58,6 @@ class MainActivity : ComponentActivity() {
                         Scaffold(
                             scaffoldState = scaffoldState,
                             topBar = { AppBar(title) },
-                            floatingActionButton = {
-                                AppFloatingActionButton(navigateToAddScreen = {
-                                    navHostController.navigate(
-                                        NavDestinations.ADD_EDIT
-                                    )
-                                })
-                            }
                         ) {
                             NavHost(
                                 navController = navHostController,
@@ -73,7 +68,13 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 composable(NavDestinations.ADD_EDIT) {
-                                    AddEditScreen()
+                                    CompositionLocalProvider(
+                                        LocalAddEditComponent provides appComponent()
+                                            .addEditComponentBuilder()
+                                            .build()
+                                    ) {
+                                        AddEditScreen()
+                                    }
                                 }
                             }
                         }

@@ -7,7 +7,8 @@
     <string name="Time">Time</string>
     <string name="select_date">Select date</string>
     <string name="select_time">Select time</string>
-    <string name="income">Income</string>
+    <string name="revenue">Revenue</string>
     <string name="expense">Expense</string>
     <string name="note">Note</string>
+    <string name="saved">Saved</string>
 </resources>
