@@ -1,6 +1,7 @@
 package uz.muhammadyusuf.kurbonov.fordealer
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,8 @@ import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.AddEditScreen
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.di.LocalAddEditComponent
 import uz.muhammadyusuf.kurbonov.fordealer.homescreen.HomeScreen
+import uz.muhammadyusuf.kurbonov.fordealer.list.ListScreen
+import uz.muhammadyusuf.kurbonov.fordealer.list.di.LocalListComponent
 import uz.muhammadyusuf.kurbonov.fordealer.ui.components.AppBar
 import uz.muhammadyusuf.kurbonov.fordealer.ui.theme.ForDealerTheme
 import uz.muhammadyusuf.kurbonov.shared.ui.LocalNavController
@@ -74,6 +77,19 @@ class MainActivity : ComponentActivity() {
                                             .build()
                                     ) {
                                         AddEditScreen()
+                                    }
+                                }
+
+                                composable(NavDestinations.LIST) {
+                                    val listComponent = remember {
+                                        appComponent()
+                                            .listComponentBuilder()
+                                            .build()
+                                    }
+                                    CompositionLocalProvider(
+                                        LocalListComponent provides listComponent
+                                    ) {
+                                        ListScreen()
                                     }
                                 }
                             }
