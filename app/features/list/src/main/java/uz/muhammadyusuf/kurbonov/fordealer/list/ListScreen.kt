@@ -1,8 +1,6 @@
 package uz.muhammadyusuf.kurbonov.fordealer.list
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -13,11 +11,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import uz.muhammadyusuf.kurbonov.fordealer.list.di.LocalListComponent
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
 import uz.muhammadyusuf.kurbonov.shared.ui.MEDIUM_MARGIN
+import uz.muhammadyusuf.kurbonov.shared.ui.SMALL_MARGIN
+import uz.muhammadyusuf.kurbonov.shared.ui.XLARGE_MARGIN
+import uz.muhammadyusuf.kurbonov.shared.ui.roundDate
 import java.text.DateFormat
+import java.util.*
 
 @Composable
 fun ListScreen() {
@@ -33,9 +36,24 @@ fun ListScreen() {
 
 @Composable
 fun ListContent(items: List<Transaction>) {
+    val grouped = items.groupBy {
+        it.dateTime.roundDate(Calendar.DAY_OF_MONTH)
+    }
     LazyColumn {
-        items(items) {
-            ListItem(item = it)
+        grouped.keys.forEach { key ->
+            item {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(XLARGE_MARGIN, XLARGE_MARGIN, XLARGE_MARGIN),
+                    text = DateFormat.getDateInstance().format(key),
+                    style = MaterialTheme.typography.subtitle1,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            items(grouped[key] ?: emptyList()){
+                ListItem(item = it)
+            }
         }
     }
 }
@@ -45,15 +63,33 @@ fun ListItem(item: Transaction) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(MEDIUM_MARGIN)
+            .padding(XLARGE_MARGIN)
     ) {
-        val dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM)
+        val dateFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM)
+        Column(modifier = Modifier.weight(1f)) {
+            if (item.note.isNotEmpty()) {
+                Text(
+                    text = item.note,
+                    style = MaterialTheme.typography.body1
+                )
+                Spacer(modifier = Modifier.height(SMALL_MARGIN))
+                Text(
+                    text = dateFormat.format(item.dateTime),
+                    style = MaterialTheme.typography.caption
+                )
+            }else{
+                Text(
+                    text = dateFormat.format(item.dateTime),
+                    style = MaterialTheme.typography.body1
+                )
+            }
+        }
         Text(
-            modifier = Modifier.weight(1f),
-            text = dateFormat.format(item.dateTime),
-            style = MaterialTheme.typography.body1
+            text = item.amount.toString(),
+            style = MaterialTheme.typography.body1,
+            fontWeight = FontWeight.Bold,
+            color = if (item.amount > 0) Color(0xFF006F3B) else Color.Red
         )
-        Text(text = item.amount.toString(), style = MaterialTheme.typography.body1, fontWeight = FontWeight.Bold)
     }
     Divider()
 }
