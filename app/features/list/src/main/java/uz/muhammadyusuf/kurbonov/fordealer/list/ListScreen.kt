@@ -13,8 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import uz.muhammadyusuf.kurbonov.fordealer.list.di.LocalListComponent
+import uz.muhammadyusuf.kurbonov.fordealer.translations.R
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
 import uz.muhammadyusuf.kurbonov.shared.ui.SMALL_MARGIN
 import uz.muhammadyusuf.kurbonov.shared.ui.XLARGE_MARGIN
@@ -61,7 +63,7 @@ fun ListContent(items: List<Transaction>) {
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
-                text = "No data",
+                text = stringResource(id = R.string.no_data),
                 style = MaterialTheme.typography.subtitle1
             )
         }
