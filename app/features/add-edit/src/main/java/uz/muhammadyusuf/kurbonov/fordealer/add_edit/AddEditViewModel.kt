@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 
 class AddEditViewModel @Inject constructor(
-    @LocalTesting private val repository: Repository
+    private val repository: Repository
 ): ViewModel() {
     private val _addEditState = MutableStateFlow<AddEditState>(AddEditState.Default)
     val addEditState: StateFlow<AddEditState> = _addEditState.asStateFlow()

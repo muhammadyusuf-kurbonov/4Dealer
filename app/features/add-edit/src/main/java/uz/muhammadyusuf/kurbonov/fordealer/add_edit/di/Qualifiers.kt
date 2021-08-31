@@ -1,7 +1,5 @@
 package uz.muhammadyusuf.kurbonov.fordealer.add_edit.di
 
-import javax.inject.Qualifier
+import uz.muhammadyusuf.kurbonov.shared.di.LocalTesting
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class LocalTesting
+typealias LocalTesting = LocalTesting

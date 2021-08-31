@@ -1,6 +1,7 @@
 package uz.muhammadyusuf.kurbonov.shared.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
 
 interface Repository {
@@ -11,4 +12,6 @@ interface Repository {
     }
 
     suspend fun createTransaction(transaction: Transaction)
+
+    val allTransactions: Flow<List<Transaction>>
 }

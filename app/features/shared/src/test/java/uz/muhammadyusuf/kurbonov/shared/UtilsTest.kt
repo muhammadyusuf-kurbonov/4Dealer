@@ -4,6 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import uz.muhammadyusuf.kurbonov.shared.ui.assignDate
 import uz.muhammadyusuf.kurbonov.shared.ui.assignTime
+import uz.muhammadyusuf.kurbonov.shared.ui.roundDate
 import uz.muhammadyusuf.kurbonov.shared.ui.toCalendar
 import java.util.Calendar.*
 
@@ -102,5 +103,74 @@ class UtilsTest {
         Assert.assertEquals(11, dateTime3Calendar[HOUR])
         Assert.assertEquals(52, dateTime1Calendar[MINUTE])
         Assert.assertEquals(2, dateTime1Calendar[SECOND])
+    }
+
+    @Test
+    fun `round date - test year`() {
+        val time = System.currentTimeMillis()
+        val calendar = time.toCalendar()
+        val thisYear = time.roundDate(YEAR)
+        val thisYearCalendar = thisYear.toCalendar()
+        Assert.assertEquals(thisYearCalendar[YEAR], calendar[YEAR])
+    }
+
+    @Test
+    fun `round date - test month`() {
+        val time = System.currentTimeMillis()
+        val calendar = time.toCalendar()
+        val thisYear = time.roundDate(MONTH)
+        val thisYearCalendar = thisYear.toCalendar()
+        Assert.assertEquals(thisYearCalendar[YEAR], calendar[YEAR])
+        Assert.assertEquals(thisYearCalendar[MONTH], calendar[MONTH])
+    }
+
+    @Test
+    fun `round date - test day`() {
+        val time = System.currentTimeMillis()
+        val calendar = time.toCalendar()
+        val thisYear = time.roundDate(DAY_OF_MONTH)
+        val thisYearCalendar = thisYear.toCalendar()
+        Assert.assertEquals(thisYearCalendar[YEAR], calendar[YEAR])
+        Assert.assertEquals(thisYearCalendar[MONTH], calendar[MONTH])
+        Assert.assertEquals(thisYearCalendar[DAY_OF_MONTH], calendar[DAY_OF_MONTH])
+    }
+
+    @Test
+    fun `round date - test hour`() {
+        val time = System.currentTimeMillis()
+        val calendar = time.toCalendar()
+        val thisYear = time.roundDate(HOUR)
+        val thisYearCalendar = thisYear.toCalendar()
+        Assert.assertEquals(thisYearCalendar[YEAR], calendar[YEAR])
+        Assert.assertEquals(thisYearCalendar[MONTH], calendar[MONTH])
+        Assert.assertEquals(thisYearCalendar[DAY_OF_MONTH], calendar[DAY_OF_MONTH])
+        Assert.assertEquals(thisYearCalendar[HOUR_OF_DAY], calendar[HOUR_OF_DAY])
+    }
+
+    @Test
+    fun `round date - test minute`() {
+        val time = System.currentTimeMillis()
+        val calendar = time.toCalendar()
+        val thisYear = time.roundDate(MINUTE)
+        val thisYearCalendar = thisYear.toCalendar()
+        Assert.assertEquals(thisYearCalendar[YEAR], calendar[YEAR])
+        Assert.assertEquals(thisYearCalendar[MONTH], calendar[MONTH])
+        Assert.assertEquals(thisYearCalendar[DAY_OF_MONTH], calendar[DAY_OF_MONTH])
+        Assert.assertEquals(thisYearCalendar[HOUR_OF_DAY], calendar[HOUR_OF_DAY])
+        Assert.assertEquals(thisYearCalendar[MINUTE], calendar[MINUTE])
+    }
+
+    @Test
+    fun `round date - test second`() {
+        val time = System.currentTimeMillis()
+        val calendar = time.toCalendar()
+        val thisYear = time.roundDate(SECOND)
+        val thisYearCalendar = thisYear.toCalendar()
+        Assert.assertEquals(thisYearCalendar[YEAR], calendar[YEAR])
+        Assert.assertEquals(thisYearCalendar[MONTH], calendar[MONTH])
+        Assert.assertEquals(thisYearCalendar[DAY_OF_MONTH], calendar[DAY_OF_MONTH])
+        Assert.assertEquals(thisYearCalendar[HOUR_OF_DAY], calendar[HOUR_OF_DAY])
+        Assert.assertEquals(thisYearCalendar[MINUTE], calendar[MINUTE])
+        Assert.assertEquals(thisYearCalendar[SECOND], calendar[SECOND])
     }
 }

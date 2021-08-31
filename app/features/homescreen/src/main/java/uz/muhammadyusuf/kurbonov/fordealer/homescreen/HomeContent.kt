@@ -21,11 +21,14 @@ fun HomeContent(
                 Alignment.Center
             )
         )
+
         AppFloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd).padding(XLARGE_MARGIN),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(XLARGE_MARGIN),
             navigateToAddScreen = {
-            navigateTo(NavDestinations.ADD_EDIT)
-        })
+                navigateTo(NavDestinations.ADD_EDIT)
+            })
     }
 }
 
