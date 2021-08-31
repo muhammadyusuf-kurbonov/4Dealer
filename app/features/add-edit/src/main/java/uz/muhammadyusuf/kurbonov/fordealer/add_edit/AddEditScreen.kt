@@ -24,10 +24,18 @@ import uz.muhammadyusuf.kurbonov.shared.ui.*
 @Composable
 fun AddEditScreen(transaction: Transaction? = null) {
     val navController = LocalNavController.current
-    LocalTitleController.current.changeTitle(
+    val titleController = LocalTitleController.current
+    val appName = stringResource(id = R.string.app_name)
+    titleController.changeTitle(
         if (transaction != null) stringResource(id = R.string.edit_transaction)
         else stringResource(R.string.new_transaction)
     )
+
+    DisposableEffect(key1 = Unit){
+        onDispose {
+            titleController.changeTitle(appName)
+        }
+    }
 
     val component = LocalAddEditComponent.current
     val viewModel = component.viewModel

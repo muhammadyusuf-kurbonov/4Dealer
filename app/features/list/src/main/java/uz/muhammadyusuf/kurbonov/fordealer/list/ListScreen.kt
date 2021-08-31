@@ -10,12 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import uz.muhammadyusuf.kurbonov.fordealer.list.di.LocalListComponent
 import uz.muhammadyusuf.kurbonov.shared.models.Transaction
-import uz.muhammadyusuf.kurbonov.shared.ui.MEDIUM_MARGIN
 import uz.muhammadyusuf.kurbonov.shared.ui.SMALL_MARGIN
 import uz.muhammadyusuf.kurbonov.shared.ui.XLARGE_MARGIN
 import uz.muhammadyusuf.kurbonov.shared.ui.roundDate
@@ -36,24 +36,34 @@ fun ListScreen() {
 
 @Composable
 fun ListContent(items: List<Transaction>) {
-    val grouped = items.groupBy {
-        it.dateTime.roundDate(Calendar.DAY_OF_MONTH)
-    }
-    LazyColumn {
-        grouped.keys.forEach { key ->
-            item {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(XLARGE_MARGIN, XLARGE_MARGIN, XLARGE_MARGIN),
-                    text = DateFormat.getDateInstance().format(key),
-                    style = MaterialTheme.typography.subtitle1,
-                    fontWeight = FontWeight.Bold
-                )
+    if (items.isNotEmpty()) {
+        val grouped = items.groupBy {
+            it.dateTime.roundDate(Calendar.DAY_OF_MONTH)
+        }
+        LazyColumn {
+            grouped.keys.forEach { key ->
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(XLARGE_MARGIN, XLARGE_MARGIN, XLARGE_MARGIN),
+                        text = DateFormat.getDateInstance().format(key),
+                        style = MaterialTheme.typography.subtitle1,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                items(grouped[key] ?: emptyList()) {
+                    ListItem(item = it)
+                }
             }
-            items(grouped[key] ?: emptyList()){
-                ListItem(item = it)
-            }
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = "No data",
+                style = MaterialTheme.typography.subtitle1
+            )
         }
     }
 }

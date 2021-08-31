@@ -3,7 +3,6 @@ package uz.muhammadyusuf.kurbonov.fordealer.homescreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,13 +21,6 @@ fun HomeContent(
                 Alignment.Center
             )
         )
-
-        Button(
-            onClick = { navigateTo(NavDestinations.LIST) },
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Text(text = "View list")
-        }
 
         AppFloatingActionButton(
             modifier = Modifier
