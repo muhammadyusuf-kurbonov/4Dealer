@@ -1,5 +1,6 @@
 package uz.muhammadyusuf.kurbonov.fordealer.add_edit
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -47,7 +48,6 @@ fun AddEditScreen(transaction: Transaction? = null) {
         transaction = transaction,
         save = {
             viewModel.save(it)
-            navController.navigate(NavDestinations.HOME)
         },
         cancel = {
             navController.navigate(NavDestinations.HOME)
@@ -61,17 +61,19 @@ fun AddEditContent(
     save: (Transaction) -> Unit,
     cancel: () -> Unit
 ) {
-    if (addEditState == AddEditState.Saving)
+    Log.d("ForDealer", addEditState.toString())
+
+    if (addEditState is AddEditState.Saving)
         LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth()
         )
 
-    if (addEditState == AddEditState.Saved) {
+    if (addEditState is AddEditState.Saved) {
         val snackbarController = LocalSnackbarController.current
         val message = stringResource(R.string.saved)
         LaunchedEffect(key1 = Unit) {
-            cancel()
             snackbarController.showInfoMessage(message)
+            cancel()
         }
     }
 

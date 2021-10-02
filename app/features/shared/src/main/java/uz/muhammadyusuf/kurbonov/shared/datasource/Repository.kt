@@ -14,4 +14,6 @@ interface Repository {
     suspend fun createTransaction(transaction: Transaction)
 
     val allTransactions: Flow<List<Transaction>>
+
+    val balance: Flow<Double>
 }

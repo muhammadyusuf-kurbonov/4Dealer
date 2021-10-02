@@ -3,6 +3,7 @@ package uz.muhammadyusuf.kurbonov.fordealer.di
 import dagger.Component
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.di.AddEditComponent
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.di.AddEditScope
+import uz.muhammadyusuf.kurbonov.fordealer.homescreen.di.HomeComponent
 import uz.muhammadyusuf.kurbonov.fordealer.list.di.ListComponent
 import javax.inject.Singleton
 
@@ -11,4 +12,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun addEditComponentBuilder(): AddEditComponent.Builder
     fun listComponentBuilder(): ListComponent.Builder
+    fun homeComponentBuilder(): HomeComponent.Builder
 }
