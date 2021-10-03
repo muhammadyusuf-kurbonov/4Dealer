@@ -1,7 +1,12 @@
 package uz.muhammadyusuf.kurbonov.shared.ui
 
 import androidx.annotation.IntDef
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.toObject
 import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  *  This method assigns timeUnits from [timeSource] to [timeInMillis]
@@ -65,4 +70,12 @@ fun Long.roundDate(@DateUnits to: Int): Long {
     calendar.set(Calendar.MONTH, 0)
     if (to == Calendar.YEAR) return calendar.timeInMillis
     return calendar.timeInMillis
+}
+
+suspend inline fun <reified T> DocumentReference.readDocument() = suspendCoroutine<T?>{ cont ->
+    get().addOnSuccessListener {
+        cont.resume(it.toObject(T::class.java))
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
 }

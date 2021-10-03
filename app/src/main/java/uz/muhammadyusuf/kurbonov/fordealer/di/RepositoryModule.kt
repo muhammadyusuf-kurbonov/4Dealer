@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Singleton
     @Provides
-    fun provideRepository(@LocalTesting firestore: FirebaseFirestore): Repository {
+    fun provideRepository(firestore: FirebaseFirestore): Repository {
         return Repository.getFirestoreRepository(firestore)
     }
 }

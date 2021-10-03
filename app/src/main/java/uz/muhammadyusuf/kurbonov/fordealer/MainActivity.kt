@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.AddEditScreen
 import uz.muhammadyusuf.kurbonov.fordealer.add_edit.di.LocalAddEditComponent
 import uz.muhammadyusuf.kurbonov.fordealer.homescreen.HomeScreen
+import uz.muhammadyusuf.kurbonov.fordealer.homescreen.di.LocalHomeComponent
 import uz.muhammadyusuf.kurbonov.fordealer.list.ListScreen
 import uz.muhammadyusuf.kurbonov.fordealer.list.di.LocalListComponent
 import uz.muhammadyusuf.kurbonov.fordealer.ui.components.AppBar
@@ -79,7 +80,13 @@ class MainActivity : ComponentActivity() {
                                 startDestination = NavDestinations.HOME
                             ) {
                                 composable(NavDestinations.HOME) {
-                                    HomeScreen()
+                                    CompositionLocalProvider(
+                                        LocalHomeComponent provides appComponent()
+                                            .homeComponentBuilder()
+                                            .build()
+                                    ) {
+                                        HomeScreen()
+                                    }
                                 }
 
                                 composable(NavDestinations.ADD_EDIT) {
