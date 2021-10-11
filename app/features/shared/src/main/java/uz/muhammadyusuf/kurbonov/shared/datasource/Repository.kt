@@ -13,6 +13,8 @@ interface Repository {
 
     suspend fun createTransaction(transaction: Transaction)
 
+    suspend fun deleteTransaction(transaction: Transaction)
+
     val allTransactions: Flow<List<Transaction>>
 
     val balance: Flow<Double>

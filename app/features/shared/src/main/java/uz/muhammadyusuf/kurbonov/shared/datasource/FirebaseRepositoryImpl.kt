@@ -22,27 +22,45 @@ internal class FirebaseRepositoryImpl(private val firestore: FirebaseFirestore) 
     override suspend fun createTransaction(transaction: Transaction) = suspendCoroutine<Unit> { cont ->
         firestore.runTransaction { dbTransaction ->
             runBlocking {
-                Log.d("ForDealer", "Start adding new transaction")
                 ensureActive()
                 val generalDocumentReference = firestore.document("general/general")
-                Log.d("ForDealer", "get current balance")
                 var generalDocument = dbTransaction.get(generalDocumentReference).toObject(General::class.java)
 
-                Log.d("ForDealer", transaction.toString())
                 val document = firestore.collection("transactions").document()
                 transaction.id = document.id
                 dbTransaction.set(document, transaction)
-                Log.d("ForDealer", "transaction created")
 
                 if (generalDocument == null) generalDocument = General(0.0)
                 generalDocument.balance += transaction.amount
-                Log.d("ForDealer", "balance updated")
                 ensureActive()
                 dbTransaction.set(generalDocumentReference, generalDocument)
-                Log.d("ForDealer", "New balance: " + generalDocument.balance)
             }
         }.addOnSuccessListener {
-            Log.d("ForDealer", "Transaction success")
+            cont.resume(Unit)
+        }.addOnFailureListener {
+            it.printStackTrace()
+            cont.resumeWithException(it)
+        }
+    }
+
+    override suspend fun deleteTransaction(transaction: Transaction) = suspendCoroutine<Unit> { cont ->
+        firestore.runTransaction { dbTransaction ->
+            runBlocking {
+                ensureActive()
+                val generalDocumentReference = firestore.document("general/general")
+                var generalDocument = dbTransaction.get(generalDocumentReference).toObject(General::class.java)
+
+                val document = firestore
+                    .collection("transactions")
+                    .document(transaction.id)
+                dbTransaction.delete(document)
+
+                if (generalDocument == null) generalDocument = General(0.0)
+                generalDocument.balance -= transaction.amount
+                ensureActive()
+                dbTransaction.set(generalDocumentReference, generalDocument)
+            }
+        }.addOnSuccessListener {
             cont.resume(Unit)
         }.addOnFailureListener {
             it.printStackTrace()

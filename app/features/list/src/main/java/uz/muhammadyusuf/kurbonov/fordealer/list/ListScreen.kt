@@ -3,9 +3,9 @@ package uz.muhammadyusuf.kurbonov.fordealer.list
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +24,7 @@ import uz.muhammadyusuf.kurbonov.shared.ui.roundDate
 import java.text.DateFormat
 import java.util.*
 
+@ExperimentalMaterialApi
 @Composable
 fun ListScreen() {
     val component = LocalListComponent.current
@@ -36,6 +37,7 @@ fun ListScreen() {
     ListContent(transactions)
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun ListContent(items: List<Transaction>) {
     if (items.isNotEmpty()) {
@@ -45,14 +47,23 @@ fun ListContent(items: List<Transaction>) {
         LazyColumn {
             grouped.keys.forEach { key ->
                 item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(XLARGE_MARGIN, XLARGE_MARGIN, XLARGE_MARGIN),
-                        text = DateFormat.getDateInstance().format(key),
-                        style = MaterialTheme.typography.subtitle1,
-                        fontWeight = FontWeight.Bold
-                    )
+                    SwipeToDismiss(
+                        state = rememberDismissState(),
+                        background = {
+                            Surface(color = Color.Red, contentColor = Color.White) {
+                                Icon(imageVector = Icons.Default.Delete, contentDescription = "")
+                            }
+                        }
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(XLARGE_MARGIN, XLARGE_MARGIN, XLARGE_MARGIN),
+                            text = DateFormat.getDateInstance().format(key),
+                            style = MaterialTheme.typography.subtitle1,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
                 items(grouped[key] ?: emptyList()) {
                     ListItem(item = it)
@@ -60,7 +71,9 @@ fun ListContent(items: List<Transaction>) {
             }
         }
     } else {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
                 text = stringResource(id = R.string.no_data),
